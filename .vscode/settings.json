@@ -9,6 +9,14 @@
   },
   "peacock.color": "#f77f00",
   "files.associations": {
-    "ostream": "cpp"
-  }
+    "ostream": "cpp",
+    "array": "cpp",
+    "deque": "cpp",
+    "string": "cpp",
+    "unordered_map": "cpp",
+    "vector": "cpp",
+    "string_view": "cpp",
+    "initializer_list": "cpp"
+  },
+  "C_Cpp.errorSquiggles": "Disabled"
 }
