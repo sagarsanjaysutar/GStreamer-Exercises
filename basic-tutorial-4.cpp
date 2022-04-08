@@ -1,7 +1,14 @@
 /*!
- * @brief
+ * @brief We are jumping to certain duration after 10 seconds of video playback.
  * @link https://gstreamer.freedesktop.org/documentation/tutorials/basic/time-management.html?gi-language=c
+ * @link https://gstreamer.freedesktop.org/documentation/additional/design/seeking.html?gi-language=c
  *
+ * In this program, we run a basic Playbin pipeline. We extract the bus messages out of it and process it via a Handler Function.
+ * This handler function will run on every bus message. One of the things we can extract out of these bus messages is stream duration.
+ * We store this info in a custom strcture. We mark the stream duration as Invalid because we want to re-query it.
+ * This is important, See handleMessage()'s `case GST_MESSAGE_DURATION` where we do the same.
+ * By doing are able to re-query the duration, check if the stream is seekable(i.e. ability to jump to certain duration),
+ * if yes, then we perform a simple seek operation whick skips us to the desired time. *
  */
 
 #include <gst/gst.h>
@@ -42,7 +49,8 @@ static void handleMessage(CustomData *data, GstMessage *msg)
     }
     case GST_MESSAGE_DURATION:
     {
-        // The duration has changed, mark the current one as invalid so it gets re-queried later.
+        // The duration has changed, mark the current one as invalid so it gets re-queried later
+        // i.e. "else-part" of the bus listener in main()
         data->duration = GST_CLOCK_TIME_NONE;
         break;
     }
@@ -137,6 +145,7 @@ int main()
     bus = gst_element_get_bus(data.playbin);
     do
     {
+        // 100 milli second time out for each bus message.
         msg = gst_bus_timed_pop_filtered(
             bus,
             100 * GST_MSECOND,
@@ -148,7 +157,7 @@ int main()
         }
         else
         {
-            // If no message is recieved it means timeout expired.
+            // If no message is recieved it means timeout expired i.e. case GST_MESSAGE_DURATION of handleMessage().
             if (data.isPlaying)
             {
                 gint64 currentPos = -1;
@@ -178,7 +187,7 @@ int main()
                         data.playbin,
                         GST_FORMAT_TIME,
                         (GstSeekFlags)(GST_SEEK_FLAG_FLUSH | GST_SEEK_FLAG_KEY_UNIT),
-                        15 * GST_SECOND);
+                        15 * GST_SECOND); // Skip to the 15th second.
 
                     data.isSeekDone = TRUE;
                 }
