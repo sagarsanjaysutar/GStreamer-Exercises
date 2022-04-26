@@ -1,5 +1,6 @@
 /*!
  * @brief Worked with "On Request Pad" instead of "Always available" and did manual linking of those pads.
+ * Added multi threading by introducing Queue elements.
  * @note Refer diagram on the tutorials page. Straight forward pipeline.
  * @link https://gstreamer.freedesktop.org/documentation/tutorials/basic/multithreading-and-pad-availability.html?gi-language=c
  */

@@ -1,7 +1,10 @@
 /*!
-* @note To make a pipeline which streams video from a camera, we first pick up the camera name(/dev/video*) by running
-`v4l2-ctl --list-devices` and then to see supported resolution we run `v4l2-ctl --list-formats-ext --device path/to/video_device`
+ * @brief Print Pad caps. The pipeline picks up video from the webcam and saves it in a file.
+ * The video can be paused/played during recording.
+ * @note Pipeline:- gst-launch-1.0 -e v4l2src device=/dev/video0 io-mode=0 ! capsfilter caps=video/x-raw,format=YUY2,width=320,height=240,framerate=30/1 ! videoconvert ! x264enc ! h264parse ! mp4mux ! filesink location= /home/sagar/Desktop/x.mp4
+ * @link https://gstreamer.freedesktop.org/documentation/tutorials/basic/media-formats-and-pad-capabilities.html?gi-language=c
  */
+
 #include <gst/gst.h>
 #include <stdio.h>
 
@@ -12,7 +15,9 @@ typedef struct
     GMainLoop *mainLoop;
     gboolean playing;
 } CustomData;
-/* ======= Helper functions ==========*/
+
+/* ======= Helper functions picked up from site ==========*/
+
 /* Functions below print the Capabilities in a human-friendly format */
 static gboolean print_field(GQuark field, const GValue *value, gpointer pfx)
 {
@@ -125,6 +130,9 @@ static void print_pad_capabilities(GstElement *element, gchar *pad_name)
     gst_object_unref(pad);
 }
 
+/*==========================================================*/
+
+// Custom Keyboard handler
 static gboolean handleKeyboard(GIOChannel *source, GIOCondition cond, CustomData *data)
 {
     gchar *str = NULL;
@@ -263,20 +271,21 @@ int main()
         return -1;
     }
 
-    // print_pad_templates_information(data.sourceFactory);
-    // print_pad_templates_information(data.capsFilterFactory);
-    // print_pad_templates_information(data.converterFactory);
-    // print_pad_templates_information(data.encoderFactory);
-    // print_pad_templates_information(data.parserFactory);
-    // print_pad_templates_information(data.muxFactory);
-    // print_pad_templates_information(data.sinkFactory);
+    print_pad_templates_information(data.sourceFactory);
+    print_pad_templates_information(data.capsFilterFactory);
+    print_pad_templates_information(data.converterFactory);
+    print_pad_templates_information(data.encoderFactory);
+    print_pad_templates_information(data.parserFactory);
+    print_pad_templates_information(data.muxFactory);
+    print_pad_templates_information(data.sinkFactory);
 
+    // To get Camera's supported resolutions, formats, etc. run `v4l2-ctl --list-formats -ext--device /dev/video2`
     GstCaps *caps = gst_caps_from_string("video/x-raw,format=YUY2,width=320,height=240,framerate=30/1");
 
     // Setting Element's properties after succesfull creation.
-    g_object_set(data.source, "device", "/dev/video0", NULL);
+    g_object_set(data.source, "device", "/dev/video0", NULL); // v4l2-ctl --list-devices
     g_object_set(data.source, "io-mode", 0, NULL);
-    g_object_set(data.capsFilter, "caps", caps, NULL);
+    g_object_set(data.capsFilter, "caps", caps, NULL); //
     // g_object_set(data.encoder, "bitrate", 8000, NULL);
     g_object_set(data.sink, "location", "./test.mp4", NULL);
 
