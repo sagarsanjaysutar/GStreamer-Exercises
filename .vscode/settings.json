@@ -1,13 +1,13 @@
 {
   "workbench.colorCustomizations": {
-    "sash.hoverBorder": "#ff982b",
-    "statusBar.background": "#f77f00",
+    "sash.hoverBorder": "#65c89b",
+    "statusBar.background": "#42b883",
     "statusBar.foreground": "#15202b",
-    "statusBarItem.hoverBackground": "#c46500",
-    "statusBarItem.remoteBackground": "#f77f00",
+    "statusBarItem.hoverBackground": "#359268",
+    "statusBarItem.remoteBackground": "#42b883",
     "statusBarItem.remoteForeground": "#15202b"
   },
-  "peacock.color": "#f77f00",
+  "peacock.color": "#42b883",
   "files.associations": {
     "ostream": "cpp",
     "array": "cpp",

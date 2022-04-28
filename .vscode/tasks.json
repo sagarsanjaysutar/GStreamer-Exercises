@@ -10,7 +10,7 @@
         "${file}",
         "-o",
         "${fileDirname}/${fileBasenameNoExtension}.o",
-        "`pkg-config --cflags --libs gstreamer-1.0`"
+        "`pkg-config --cflags --libs gstreamer-1.0 gstreamer-pbutils-1.0`"
       ],
       "options": {
         "cwd": "${fileDirname}"
