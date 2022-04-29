@@ -1,5 +1,11 @@
 #include <gst/gst.h>
-
+/*!
+    Implement interpipes. Make a sophisticated pipeline. Here is a webcam recording pipeline (with audio)
+    gst-launch-1.0 -e
+    v4l2src device=/dev/video2 ! queue ! videoconvert ! x264enc tune=zerolatency ! h264parse ! mux.
+    alsasrc device="hw:2,0" ! queue ! audioconvert ! avenc_aac ! mp4mux name=mux !
+    filesink location=/home/sagar/Desktop/a.mp4
+ */
 typedef struct
 {
     GstElement *pipeline, *videoSource, *audioSource;
